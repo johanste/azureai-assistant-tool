@@ -11,7 +11,7 @@ PACKAGE_NAME = "azure-ai-assistant"
 PACKAGE_PPRINT_NAME = "AI Assistant"
 
 # a-b-c => a/b/c
-PACKAGE_FOLDER_PATH = PACKAGE_NAME.replace("-", "/")
+PACKAGE_FOLDER_PATH = "sdk/azure-ai-assistant/azure/ai/assistant"
 # a-b-c => a.b.c
 NAMESPACE_NAME = PACKAGE_NAME.replace("-", ".")
 
@@ -21,7 +21,7 @@ with open(os.path.join(PACKAGE_FOLDER_PATH, "_version.py"), "r") as fd:
 if not version:
     raise RuntimeError("Cannot find version information")
 
-with open("README.md", encoding="utf-8") as f:
+with open("sdk/azure-ai-assistant/README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
@@ -50,6 +50,7 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     packages=find_packages(
+        where="sdk/azure-ai-assistant",
         exclude=[
             # Exclude packages that will be covered by PEP420 or nspkg
             # This means any folder structure that only consists of a __init__.py.
@@ -59,8 +60,17 @@ setup(
             "azure.ai"
         ]
     ),
+    package_dir={'': 'sdk/azure-ai-assistant'},
     package_data={
         'azure.ai.assistant': ['py.typed'],
+    },
+    entry_points = {
+        'console_scripts': [
+            'openaiassistants=azure.ai.assistant.__main__:main'
+        ],
+    },
+    extras_require={
+        "UI": ["PySide6>=6.7" ],
     },
     install_requires=[
         "openai>=1.23.2",
